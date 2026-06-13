@@ -735,7 +735,7 @@
                     await navigator.share({
                         files: [fileDiubah],
                         title: 'Konfirmasi Pembayaran',
-                        text: `*Yth. Bapak Muhammad Avie Sienna*,\n\nBerikut lampiran bukti transfer saya untuk verifikasi konfirmasi pembayaran dengan rincian data sebagai berikut:\n\n• Nama Pengirim: *${nama.toUpperCase()}*\n• Bank Tujuan: Bank ${bank}\n• Nominal Transfer: Rp ${formattedNominal}\n• Status Transfer: ${statusTransfer}\n• Waktu Transaksi: ${timestampString}\n• Catatan Tambahan: ${keterangan}\n\nDokumen bukti fisik transfer pengiriman dapat dilihat pada lampiran berikut.\n\n*Catatan:* Tanpa bukti transfer tidak akan di proses!\n\nTerimakasih.`
+                        text: `*Yth. Bapak Muhammad Avie Sienna*,\n\nBerikut lampiran bukti transfer saya untuk verifikasi konfirmasi pembayaran dengan rincian data sebagai berikut:\n\n• Nama Pengirim: *${nama.toUpperCase()}*\n• Bank Tujuan: Bank ${bank}\n• Nominal Transfer: Rp ${formattedNominal}\n• Status Transfer: ${statusTransfer}\n• Waktu Transaksi: ${timestampString}\n• Catatan Tambahan: ${keterangan}\n\nDokumen bukti fisik transfer pengiriman dapat dilihat pada lampiran berikut.\n\n*Catatan:* Tanpa bukti transfer tidak akan di proses!\n\nTerima Kasih.`
                     });
                     
                     resetTombol(submitBtn, btnSpinner, btnText);

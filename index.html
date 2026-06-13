@@ -19,6 +19,7 @@
             --text-detail: #cbd5e1;
             --error-color: #ef4444;
             --success-color: #10b981;
+            --logo-filter: brightness(0) invert(1);
         }
 
         [data-theme="light"] {
@@ -33,6 +34,7 @@
             --accent-hover: #1d4ed8;
             --bank-name-color: #1d4ed8;
             --text-detail: #334155;
+            --logo-filter: none;
         }
 
         * {
@@ -130,9 +132,9 @@
             height: 120px;
             border-radius: 50%;
             padding: 4px;
-            background: linear-gradient(135deg, var(--error-color), #b91c1c);
+            background: linear-gradient(135deg, var(--accent-color), #1d4ed8);
             margin-bottom: 16px;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.25);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
         }
 
         .avatar {
@@ -195,10 +197,30 @@
         .bank-item {
             padding: 12px 0;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
         
         .bank-item:last-child {
             border-bottom: none;
+        }
+
+        .bank-logo {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            border-radius: 6px;
+            background-color: transparent;
+            flex-shrink: 0;
+        }
+
+        .invert-dark {
+            filter: var(--logo-filter);
+        }
+
+        .bank-content {
+            flex-grow: 1;
         }
 
         .bank-name {
@@ -210,7 +232,7 @@
         .bank-detail {
             font-size: 13px;
             color: var(--text-detail);
-            margin-top: 4px;
+            margin-top: 2px;
             font-weight: 500;
         }
 
@@ -299,7 +321,6 @@
             z-index: 2;
         }
 
-        /* FITUR BARU: Pratinjau Gambar */
         .img-preview-el {
             max-width: 120px;
             max-height: 120px;
@@ -330,23 +351,39 @@
             min-height: 90px;
         }
 
-        .note-container {
-            background-color: rgba(239, 68, 68, 0.08);
-            border-left: 4px solid var(--error-color);
-            padding: 12px 14px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: var(--text-detail);
+        .notice-box {
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 13px;
             line-height: 1.6;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .note-warning {
+        .notice-danger {
+            background-color: rgba(239, 68, 68, 0.08);
+            border-left: 4px solid var(--error-color);
+            color: var(--text-color);
+        }
+
+        .notice-danger strong {
             color: var(--error-color);
+        }
+
+        .notice-secure {
+            background-color: rgba(16, 185, 129, 0.06);
+            border-left: 4px solid var(--success-color);
+            color: var(--text-detail);
+        }
+
+        .notice-secure .secure-title {
+            color: var(--success-color);
             font-weight: 700;
-            font-style: italic;
-            display: block;
-            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .btn-submit {
@@ -363,16 +400,13 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
             -webkit-tap-highlight-color: transparent;
+            margin-top: 8px;
         }
 
         .btn-submit:hover:not(:disabled) {
             background-color: var(--accent-hover);
-        }
-
-        .btn-submit:active:not(:disabled) {
-            transform: scale(0.98);
         }
 
         .btn-submit:disabled {
@@ -381,7 +415,6 @@
             box-shadow: none;
         }
 
-        /* FITUR BARU: Animasi Spinner Loading */
         .spinner {
             width: 18px;
             height: 18px;
@@ -406,41 +439,15 @@
         }
 
         @media (min-width: 769px) {
-            body {
-                padding: 40px 20px;
-            }
-            .theme-toggle-btn {
-                position: absolute;
-                top: 24px;
-                right: 24px;
-                margin-bottom: 0;
-            }
-            .container {
-                padding: 40px;
-                margin-top: 20px;
-            }
-            .main-content {
-                flex-direction: row;
-                gap: 40px;
-            }
-            .left-panel {
-                flex: 1;
-                min-width: 320px;
-            }
-            .right-panel {
-                flex: 1.2;
-                min-width: 360px;
-            }
-            .avatar-container {
-                width: 140px;
-                height: 140px;
-            }
-            .profile-name {
-                font-size: 24px;
-            }
-            .bank-list {
-                max-height: 340px;
-            }
+            body { padding: 40px 20px; }
+            .theme-toggle-btn { position: absolute; top: 24px; right: 24px; margin-bottom: 0; }
+            .container { padding: 40px; margin-top: 20px; }
+            .main-content { flex-direction: row; gap: 40px; }
+            .left-panel { flex: 1; min-width: 320px; }
+            .right-panel { flex: 1.2; min-width: 360px; }
+            .avatar-container { width: 140px; height: 140px; }
+            .profile-name { font-size: 24px; }
+            .bank-list { max-height: 340px; }
         }
     </style>
 </head>
@@ -469,17 +476,80 @@
                 <div class="profile-subtitle">Informasi Pembayaran</div>
 
                 <div class="bank-info-box">
-                    <div class="bank-info-title">Daftar Rekening , Pilih Salah Satu dari Daftar Rekening Berikut ::</div>
+                    <div class="bank-info-title">Daftar Rekening, Pilih Salah Satu dari Daftar Rekening Berikut :</div>
                     <ul class="bank-list">
-                        <li class="bank-item"><div class="bank-name">1. Bank BCA</div><div class="bank-detail">6695678057</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
-                        <li class="bank-item"><div class="bank-name">2. Bank Mandiri</div><div class="bank-detail">1590012958624</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
-                        <li class="bank-item"><div class="bank-name">3. Bank Mandiri Taspen</div><div class="bank-detail">2011423016</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
-                        <li class="bank-item"><div class="bank-name">4. Bank BRI</div><div class="bank-detail">361101008802505</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
-                        <li class="bank-item"><div class="bank-name">5. Bank BNI</div><div class="bank-detail">1958304901</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
-                        <li class="bank-item"><div class="bank-name">6. Bank BSI</div><div class="bank-detail">7328635326</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
-                        <li class="bank-item"><div class="bank-name">7. Bank Kalteng</div><div class="bank-detail">3010202078575</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
-                        <li class="bank-item"><div class="bank-name">8. Bank BTN</div><div class="bank-detail">1001700012526</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
-                        <li class="bank-item"><div class="bank-name">9. SeaBank</div><div class="bank-detail">901172764507</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" alt="BCA" class="bank-logo">
+                            <div class="bank-content">
+                                <div class="bank-name">1. Bank BCA</div>
+                                <div class="bank-detail">6695678057</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
+                        <li class="bank-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" alt="Mandiri" class="bank-logo">
+                            <div class="bank-content">
+                                <div class="bank-name">2. Bank Mandiri</div>
+                                <div class="bank-detail">1590012958624</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
+                        <li class="bank-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/id/d/dc/Mandiri_taspen.png" alt="Mandiri Taspen" class="bank-logo">
+                            <div class="bank-content">
+                                <div class="bank-name">3. Bank Mandiri Taspen</div>
+                                <div class="bank-detail">2011423016</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
+                        <li class="bank-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/68/BANK_BRI_logo.svg" alt="BRI" class="bank-logo">
+                            <div class="bank-content">
+                                <div class="bank-name">4. Bank BRI</div>
+                                <div class="bank-detail">361101008802505</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
+                        <li class="bank-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Negara_Indonesia_logo.svg" alt="BNI" class="bank-logo">
+                            <div class="bank-content">
+                                <div class="bank-name">5. Bank BNI</div>
+                                <div class="bank-detail">1958304901</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
+                        <li class="bank-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Bank_Syariah_Indonesia_2021.svg" alt="BSI" class="bank-logo">
+                            <div class="bank-content">
+                                <div class="bank-name">6. Bank BSI</div>
+                                <div class="bank-detail">7328635326</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
+                        <li class="bank-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/id/3/36/Bank_Kalteng.png" alt="Bank Kalteng" class="bank-logo">
+                            <div class="bank-content">
+                                <div class="bank-name">7. Bank Kalteng</div>
+                                <div class="bank-detail">3010202078575</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
+                        <li class="bank-item">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Logo_Bank_BTN.svg" alt="BTN" class="bank-logo invert-dark">
+                            <div class="bank-content">
+                                <div class="bank-name">8. Bank BTN</div>
+                                <div class="bank-detail">1001700012526</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
+                        <li class="bank-item">
+                            <img src="https://www.vectorlogo.zone/logos/seabank/seabank-icon.svg" alt="SeaBank" class="bank-logo">
+                            <div class="bank-content">
+                                <div class="bank-name">9. SeaBank</div>
+                                <div class="bank-detail">901172764507</div>
+                                <div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -539,14 +609,24 @@
                         <textarea id="keterangan" class="form-control" placeholder="Tulis keterangan jika ada..."></textarea>
                     </div>
 
-                    <div class="note-container">
-                        <strong>Info Sistem:</strong> Foto diproses menjadi link cloud secara otomatis dan langsung disematkan ke dalam pesan WhatsApp.
-                        <span class="note-warning">Tanpa bukti transfer tidak akan di proses!</span>
+                    <div class="notice-box notice-danger">
+                        <strong>PENTING:</strong> 
+                        <span>Tanpa upload foto bukti transfer, data konfirmasi tidak akan diproses oleh sistem. Pastikan gambar struk terlihat dengan jelas dan valid.</span>
+                    </div>
+
+                    <div class="notice-box notice-secure">
+                        <div class="secure-title">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-bottom: -1px;">
+                                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                            </svg>
+                            Jaminan Keamanan & Privasi Data
+                        </div>
+                        <span>Seluruh data identitas serta berkas dokumen transaksi yang Anda isi dan unggah melalui formulir pembayaran ini dijamin kerahasiaannya secara penuh. Data dienkripsi secara aman dan hanya digunakan untuk keperluan verifikasi validitas pembayaran internal secara profesional.</span>
                     </div>
 
                     <button type="submit" id="submitBtn" class="btn-submit">
                         <span class="spinner" id="btnSpinner"></span>
-                        <span id="btnText">Kirim Konfirmasi ke WA</span>
+                        <span id="btnText">Kirim Otomatis ke WhatsApp</span>
                     </button>
                 </form>
             </div>
@@ -558,12 +638,11 @@
     </div>
 
     <script>
+        // Tema & Waktu Real-time
         const themeToggle = document.getElementById('themeToggle');
         const themeToggleText = document.getElementById('themeToggleText');
-        
         themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'light') {
+            if (document.documentElement.getAttribute('data-theme') === 'light') {
                 document.documentElement.removeAttribute('data-theme');
                 themeToggleText.textContent = 'Mode Terang';
             } else {
@@ -576,144 +655,115 @@
             const now = new Date();
             const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('liveDateTime').textContent = `${days[now.getDay()]}, ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]} ${now.getFullYear()} • ${hours}:${minutes}:${seconds}`;
+            document.getElementById('liveDateTime').textContent = `${days[now.getDay()]} , ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]} ${now.getFullYear()} • ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
         }
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
+        setInterval(updateDateTime, 1000); updateDateTime();
+        document.getElementById('copyrightText').textContent = `${new Date().getFullYear()} Muhammad Avie Sienna`;
 
-        const currentYear = new Date().getFullYear();
-        document.getElementById('copyrightText').textContent = `${currentYear} Muhammad Avie Sienna`;
-
-        // FITUR BARU: Format Otomatis Rupiah saat Mengetik
+        // Format Rupiah
         const nominalDisplay = document.getElementById('nominalDisplay');
         const nominalHidden = document.getElementById('nominal');
-
-        nominalDisplay.addEventListener('input', function(e) {
+        nominalDisplay.addEventListener('input', function() {
             let value = this.value.replace(/\D/g, '');
-            nominalHidden.value = value; // Simpan nilai angka bersih untuk form data
-            
-            if (value) {
-                this.value = Number(value).toLocaleString('id-ID');
-            } else {
-                this.value = '';
-            }
+            nominalHidden.value = value;
+            this.value = value ? Number(value).toLocaleString('id-ID') : '';
         });
 
-        // FITUR BARU: Validasi Ukuran File & Tampilkan Pratinjau Gambar Langsung
+        // Preview File
+        let rawFileBlob = null;
+
         document.getElementById('buktiTransfer').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const previewText = document.getElementById('filePreviewName');
             const imgPreview = document.getElementById('imgPreview');
             
             if(file) {
-                // Batasi file di atas 5MB agar tidak crash saat diunggah
-                if (file.size > 5 * 1024 * 1024) {
-                    alert("Ukuran berkas terlalu besar! Maksimal batas ukuran foto adalah 5 MB.");
-                    this.value = '';
-                    previewText.textContent = "";
-                    imgPreview.style.display = "none";
-                    return;
-                }
-
-                previewText.textContent = "✔ Foto dipilih: " + file.name;
+                rawFileBlob = file;
+                previewText.textContent = "✔ Foto termuat: " + file.name;
                 previewText.style.color = "var(--success-color)"; 
 
-                // Membuat URL objek gambar untuk ditampilkan ke layar
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     imgPreview.src = e.target.result;
                     imgPreview.style.display = "block";
                 }
                 reader.readAsDataURL(file);
-            } else {
-                previewText.textContent = "";
-                imgPreview.style.display = "none";
             }
         });
 
-        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        // EKSEKUSI FORMULIR UTAMA
+        document.getElementById('paymentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const submitBtn = document.getElementById('submitBtn');
             const btnSpinner = document.getElementById('btnSpinner');
             const btnText = document.getElementById('btnText');
-            const previewText = document.getElementById('filePreviewName');
-            const fileInput = document.getElementById('buktiTransfer');
-            const file = fileInput.files[0];
 
-            if (!file) {
-                alert("Mohon pilih berkas gambar bukti terlebih dahulu!");
-                return;
-            }
-
-            // Memperbarui UI tombol ke status Loading
             submitBtn.disabled = true;
             btnSpinner.style.display = "inline-block";
-            btnText.textContent = "Mengunggah Foto...";
-            previewText.textContent = "⏳ Memproses penyimpanan link awan... Mohon tunggu...";
-            previewText.style.color = "#f59e0b";
+            btnText.textContent = "Mengalihkan Jalur...";
 
-            const formData = new FormData();
-            formData.append("image", file);
-
-            fetch("https://api.imgur.com/3/image", {
-                method: "POST",
-                headers: {
-                    Authorization: "Client-ID c9c82bc0e67cf77"
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.success) {
-                    kirimKeWhatsApp(result.data.link);
-                } else {
-                    throw new Error();
-                }
-            })
-            .catch(() => {
-                alert("Gagal mengunggah foto otomatis ke server. Data teks akan tetap dialihkan.");
-                kirimKeWhatsApp("Gagal upload otomatis (Silakan sematkan berkas manual di WA)");
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                btnSpinner.style.display = "none";
-                btnText.textContent = "Kirim Konfirmasi ke WA";
-                previewText.textContent = "✔ Sukses dikonfirmasi!";
-                previewText.style.color = "var(--success-color)";
-            });
-        });
-
-        function kirimKeWhatsApp(urlGambar) {
             const nama = document.getElementById('nama').value;
             const bank = document.getElementById('bankTujuan').value;
-            const nominal = nominalHidden.value; // Ambil data angka murni
+            const nominal = nominalHidden.value;
             const statusTransfer = document.getElementById('statusTransfer').value;
             const keterangan = document.getElementById('keterangan').value || '-';
-
             const formattedNominal = Number(nominal).toLocaleString('id-ID');
-            const whatsappNumber = "6285245867094"; 
-            
+            const whatsappNumber = "6285245867094";
+
             const now = new Date();
             const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            const timestampString = `${days[now.getDay()]}, ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]} ${now.getFullYear()} Pukul ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
+            const timestampString = `${days[now.getDay()]}, ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]} ${now.getFullYear()} pukul ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
 
-            const textMessage = `Halo pak *Muhammad Avie Sienna*,%0A%0ASaya *${encodeURIComponent(nama)}* ingin melakukan konfirmasi pembayaran dengan rincian berikut:%0A%0A` +
-                                `• *Nama Pengirim:* *${encodeURIComponent(nama)}*%0A` +
+            // STRUKTUR PESAN WHATSAPP (BAPAK MUHAMMAD AVIE SIENNA & NAMA PENGIRIM SEKARANG BOLD)
+            const textMessage = `*Yth. Bapak Muhammad Avie Sienna*,%0A%0ABerikut lampiran bukti transfer saya untuk verifikasi konfirmasi pembayaran dengan rincian data sebagai berikut:%0A%0A` +
+                                `• *Nama Pengirim:* *${encodeURIComponent(nama.toUpperCase())}*%0A` +
                                 `• *Bank Tujuan:* Bank ${encodeURIComponent(bank)}%0A` +
                                 `• *Nominal Transfer:* Rp ${encodeURIComponent(formattedNominal)}%0A` +
                                 `• *Status Transfer:* *${encodeURIComponent(statusTransfer)}*%0A` +
-                                `• *Tanggal Update:* ${encodeURIComponent(timestampString)}%0A` +
-                                `• *Link Foto Bukti:* ${encodeURIComponent(urlGambar)}%0A` +
-                                `• *Keterangan:* ${encodeURIComponent(keterangan)}%0A%0A` +
-                                `*PERINGATAN:* Tanpa bukti transfer tidak akan di proses!%0A%0A` +
-                                `Pak *Muhammad Avie Sienna* bisa langsung mengklik link tautan di atas untuk melihat bukti gambar transfer saya secara instan. Terima kasih!`;
+                                `• *Waktu Transaksi:* ${encodeURIComponent(timestampString)}%0A` +
+                                `• *Catatan Tambahan:* ${encodeURIComponent(keterangan)}%0A%0A` +
+                                `Dokumen bukti fisik transfer pengiriman dapat dilihat pada lampiran berikut.%0A%0A` +
+                                `*Catatan:* Tanpa bukti transfer tidak akan di proses!%0A%0ATerimakasih.`;
 
-            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${textMessage}`, '_blank');
+            // JALUR UTAMA: Web Share API Kompatibel Gambar (Mengirim Teks + Foto Sekaligus)
+            if (navigator.canShare && navigator.canShare({ files: [rawFileBlob] })) {
+                try {
+                    const fileDiubah = new File([rawFileBlob], `Struk_Transfer_${nama.replace(/\s+/g, '_')}.png`, { type: rawFileBlob.type });
+                    
+                    await navigator.share({
+                        files: [fileDiubah],
+                        title: 'Konfirmasi Pembayaran',
+                        text: `*Yth. Bapak Muhammad Avie Sienna*,\n\nBerikut lampiran bukti transfer saya untuk verifikasi konfirmasi pembayaran dengan rincian data sebagai berikut:\n\n• Nama Pengirim: *${nama.toUpperCase()}*\n• Bank Tujuan: Bank ${bank}\n• Nominal Transfer: Rp ${formattedNominal}\n• Status Transfer: ${statusTransfer}\n• Waktu Transaksi: ${timestampString}\n• Catatan Tambahan: ${keterangan}\n\nDokumen bukti fisik transfer pengiriman dapat dilihat pada lampiran berikut.\n\n*Catatan:* Tanpa bukti transfer tidak akan di proses!\n\nTerimakasih.`
+                    });
+                    
+                    resetTombol(submitBtn, btnSpinner, btnText);
+                    return; 
+                } catch (err) {
+                    console.log("Jalur sekunder otomatis dipicu.");
+                }
+            }
+
+            // JALUR CADANGAN: Membuka whatsapp:// internal intent dengan data payload + Clipboard copy
+            try {
+                const item = new ClipboardItem({ [rawFileBlob.type]: rawFileBlob });
+                await navigator.clipboard.write([item]);
+            } catch (cErr) {
+                console.log("Clipboard bypass dilewati.");
+            }
+
+            window.location.href = `whatsapp://send?phone=${whatsappNumber}&text=${textMessage}`;
+
+            setTimeout(() => {
+                resetTombol(submitBtn, btnSpinner, btnText);
+            }, 1000);
+        });
+
+        function resetTombol(btn, spin, txt) {
+            btn.disabled = false;
+            spin.style.display = "none";
+            txt.textContent = "Kirim Otomatis ke WhatsApp";
         }
     </script>
 </body>

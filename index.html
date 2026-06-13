@@ -52,7 +52,6 @@
             padding: 16px;
         }
 
-        /* TOMBOL RESPONSIF UNTUK SWITCH THEME */
         .theme-toggle-btn {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
@@ -111,7 +110,7 @@
 
         .main-content {
             display: flex;
-            flex-direction: column; /* MOBILE FIRST DESIGNS */
+            flex-direction: column;
             gap: 32px;
         }
 
@@ -253,7 +252,7 @@
             border-radius: 10px;
             padding: 14px;
             color: var(--text-color);
-            font-size: 15px; /* Mencegah auto zoom pada iOS Safari */
+            font-size: 15px;
             outline: none;
             -webkit-appearance: none;
         }
@@ -320,8 +319,16 @@
             border-radius: 6px;
             font-size: 12px;
             color: var(--text-detail);
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 24px;
+        }
+
+        .note-warning {
+            color: #ef4444;
+            font-weight: 700;
+            font-style: italic;
+            display: block;
+            margin-top: 4px;
         }
 
         .btn-submit {
@@ -361,7 +368,6 @@
             padding-top: 16px;
         }
 
-        /* MEDIA QUERIES UNTUK TAMPILAN MONITOR / DESKTOP LAPTOP */
         @media (min-width: 769px) {
             body {
                 padding: 40px 20px;
@@ -496,6 +502,7 @@
 
                     <div class="note-container">
                         <strong>Info Sistem:</strong> Foto diproses menjadi link cloud secara otomatis dan langsung disematkan ke dalam pesan WhatsApp.
+                        <span class="note-warning">Tanpa bukti transfer tidak akan di proses!</span>
                     </div>
 
                     <button type="submit" id="submitBtn" class="btn-submit">
@@ -511,7 +518,6 @@
     </div>
 
     <script>
-        // ENGINE THEME SWITCHER
         const themeToggle = document.getElementById('themeToggle');
         const themeToggleText = document.getElementById('themeToggleText');
         
@@ -526,7 +532,6 @@
             }
         });
 
-        // LIVE DATE TIME UPDATER
         function updateDateTime() {
             const now = new Date();
             const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -539,11 +544,9 @@
         setInterval(updateDateTime, 1000);
         updateDateTime();
 
-        // TAHUN COPYRIGHT OTOMATIS
         const currentYear = new Date().getFullYear();
         document.getElementById('copyrightText').textContent = `${currentYear} Muhammad Avie Sienna`;
 
-        // FEEDBACK FILENAME
         document.getElementById('buktiTransfer').addEventListener('change', function(e) {
             const fileName = e.target.files[0] ? e.target.files[0].name : '';
             const previewText = document.getElementById('filePreviewName');
@@ -555,7 +558,6 @@
             }
         });
 
-        // UPLOAD CLOUD & REDIRECT ENGINE
         document.getElementById('paymentForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -577,7 +579,6 @@
             const formData = new FormData();
             formData.append("image", file);
 
-            // Menggunakan jalur server Imgur sebagai penyimpanan awan sementara data biner gambar
             fetch("https://api.imgur.com/3/image", {
                 method: "POST",
                 headers: {
@@ -620,6 +621,7 @@
             const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
             const timestampString = `${days[now.getDay()]}, ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]} ${now.getFullYear()} Pukul ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
 
+            // PENAMBAHAN KALIMAT PERINGATAN JUGA PADA FORMAT CHAT WHATSAPP SEBELUM DIKIRIM
             const textMessage = `Halo pak *Muhammad Avie Sienna*,%0A%0ASaya *${encodeURIComponent(nama)}* ingin melakukan konfirmasi pembayaran dengan rincian berikut:%0A%0A` +
                                 `• *Nama Pengirim:* *${encodeURIComponent(nama)}*%0A` +
                                 `• *Bank Tujuan:* Bank ${encodeURIComponent(bank)}%0A` +
@@ -628,6 +630,7 @@
                                 `• *Tanggal Update:* ${encodeURIComponent(timestampString)}%0A` +
                                 `• *Link Foto Bukti:* ${encodeURIComponent(urlGambar)}%0A` +
                                 `• *Keterangan:* ${encodeURIComponent(keterangan)}%0A%0A` +
+                                `*PERINGATAN:* Tanpa bukti transfer tidak akan di proses!%0A%0A` +
                                 `Pak *Muhammad Avie Sienna* bisa langsung mengklik link tautan di atas untuk melihat bukti gambar transfer saya secara instan. Terima kasih!`;
 
             window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${textMessage}`, '_blank');

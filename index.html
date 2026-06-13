@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Pembayaran - Muhammad Avie Sienna</title>
+    <style>
+        :root {
+            --bg-color: #0b132b;
+            --container-bg: #111a36;
+            --text-color: #ffffff;
+            --border-color: #1c2a4e;
+            --sub-text: #7e8baf;
+            --panel-bg: #0b132b;
+            --input-bg: #0b132b;
+            --accent-color: #3b82f6;
+            --accent-hover: #1d4ed8;
+            --bank-name-color: #3b82f6;
+            --text-detail: #cbd5e1;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f0f4f8;
+            --container-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
+            --sub-text: #64748b;
+            --panel-bg: #f8fafc;
+            --input-bg: #ffffff;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --bank-name-color: #1d4ed8;
+            --text-detail: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .theme-toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: var(--sub-text);
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            margin-right: 8px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .left-panel {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            overflow: hidden;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: var(--panel-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-subtitle {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 35px;
+        }
+
+        .bank-info-box {
+            width: 100%;
+            text-align: left;
+            background-color: var(--panel-bg);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .bank-info-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--sub-text);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bank-list {
+            list-style: none;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .bank-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .bank-item:last-child {
+            border-bottom: none;
+        }
+
+        .bank-name {
+            font-weight: 600;
+            color: var(--bank-name-color);
+            font-size: 14px;
+        }
+
+        .bank-detail {
+            font-size: 13px;
+            color: var(--text-detail);
+            margin-top: 2px;
+        }
+
+        .an-name {
+            font-size: 12px;
+            color: var(--sub-text);
+            font-style: italic;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .right-panel {
+            flex: 1.2;
+            min-width: 320px;
+        }
+
+        .form-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--sub-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            color: var(--sub-text);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-color);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+        }
+
+        .file-input-container {
+            position: relative;
+            background-color: var(--input-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .file-input-container:hover {
+            border-color: var(--accent-color);
+        }
+
+        .file-input-container input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-label-text {
+            font-size: 13px;
+            color: var(--sub-text);
+        }
+
+        .file-label-text strong {
+            color: var(--accent-color);
+        }
+
+        .preview-text {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #f59e0b;
+            word-break: break-all;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%237e8baf'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .note-container {
+            background-color: rgba(239, 68, 68, 0.08);
+            border-left: 4px solid #ef4444;
+            padding: 14px;
+            border-radius: 4px;
+            font-size: 12.5px;
+            color: var(--text-detail);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-submit:disabled {
+            background-color: #475569;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            color: var(--sub-text);
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .container {
+                padding: 25px 20px;
+            }
+            .theme-toggle-btn {
+                position: static;
+                margin-bottom: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+            body {
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle-btn" id="themeToggle">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 1A5 5 0 1 1 8 3a5 5 0 0 1 0 10z"/>
+        </svg>
+        <span id="themeToggleText">Mode Terang</span>
+    </button>
+
+    <div class="container">
+        <div class="header-top">
+            <span class="status-dot"></span> <span id="liveDateTime">Memuat waktu...</span>
+        </div>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="avatar-container">
+                    <div class="avatar">
+                        <img src="https://lh3.googleusercontent.com/d/1maGet0jkFl4I76lxKVH9FZLNj9h22usX" alt="Muhammad Avie Sienna" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill=\'%23ffffff\' viewBox=\'0 0 24 24\'><path d=\'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z\'/></svg>'">
+                    </div>
+                </div>
+                <h1 class="profile-name">Muhammad Avie Sienna</h1>
+                <div class="profile-subtitle">Informasi Kontak & Pembayaran</div>
+
+                <div class="bank-info-box">
+                    <div class="bank-info-title">Silahkan transfer ke salah satu nomor rekening berikut :</div>
+                    <ul class="bank-list">
+                        <li class="bank-item"><div class="bank-name">1. Bank BCA</div><div class="bank-detail">No. Rekening: 6695678057</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item"><div class="bank-name">2. Bank Mandiri</div><div class="bank-detail">No. Rekening: 1590012958624</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item"><div class="bank-name">3. Bank Mandiri Taspen</div><div class="bank-detail">No. Rekening: 2011423016</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item"><div class="bank-name">4. Bank BRI</div><div class="bank-detail">No. Rekening: 361101008802505</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item"><div class="bank-name">5. Bank BNI</div><div class="bank-detail">No. Rekening: 1958304901</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item"><div class="bank-name">6. Bank BSI</div><div class="bank-detail">No. Rekening: 7328635326</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item"><div class="bank-name">7. Bank Kalteng</div><div class="bank-detail">No. Rekening: 3010202078575</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item"><div class="bank-name">8. Bank BTN</div><div class="bank-detail">No. Rekening: 1001700012526</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                        <li class="bank-item"><div class="bank-name">9. SeaBank</div><div class="bank-detail">No. Rekening: 901172764507</div><div class="an-name">a.n. MUHAMMAD AVIE SIENNA</div></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="form-title">Formulir Konfirmasi Pembayaran</div>
+
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label class="form-label" for="nama">Nama Lengkap Anda</label>
+                        <input type="text" id="nama" class="form-control" placeholder="Masukkan nama Anda" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="bankTujuan">Pilih Bank Tujuan</label>
+                        <select id="bankTujuan" class="form-control" required>
+                            <option value="" disabled selected>-- Pilih Rekening Tujuan Anda --</option>
+                            <option value="BCA (6695678057)">Bank BCA - 6695678057</option>
+                            <option value="Mandiri (1590012958624)">Bank Mandiri - 1590012958624</option>
+                            <option value="Mandiri Taspen (2011423016)">Bank Mandiri Taspen - 2011423016</option>
+                            <option value="BRI (361101008802505)">Bank BRI - 361101008802505</option>
+                            <option value="BNI (1958304901)">Bank BNI - 1958304901</option>
+                            <option value="BSI (7328635326)">Bank BSI - 7328635326</option>
+                            <option value="Kalteng (3010202078575)">Bank Kalteng - 3010202078575</option>
+                            <option value="BTN (1001700012526)">Bank BTN - 1001700012526</option>
+                            <option value="SeaBank (901172764507)">SeaBank - 901172764507</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="nominal">Nominal yang Ditransfer (Rp)</label>
+                        <input type="number" id="nominal" class="form-control" placeholder="Contoh: 250000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="statusTransfer">Status Transfer</label>
+                        <select id="statusTransfer" class="form-control" required>
+                            <option value="" disabled selected>-- Pilih Status Transaksi --</option>
+                            <option value="SUKSES">SUKSES (Berhasil Berpindah Dana)</option>
+                            <option value="BELUM">BELUM / PENDING (Sedang Diproses)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Upload Foto Bukti Transfer</label>
+                        <div class="file-input-container">
+                            <div class="file-label-text">Klik atau seret gambar ke sini untuk <strong>Upload Bukti</strong></div>
+                            <input type="file" id="buktiTransfer" accept="image/*" required>
+                            <div id="filePreviewName" class="preview-text"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="keterangan">Keterangan Tambahan <span>(Opsional)</span></label>
+                        <textarea id="keterangan" class="form-control" placeholder="Tulis catatan atau pesan..."></textarea>
+                    </div>
+
+                    <div class="note-container">
+                        <strong>Sistem Otomatis:</strong> Gambar akan diunggah ke server terlebih dahulu dan link foto langsung masuk di dalam pesan teks WhatsApp.
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn-submit">
+                        Kirim Konfirmasi Pembayaran WA
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer">
+            © <span id="copyrightText"></span>
+        </div>
+    </div>
+
+    <script>
+        // 1. SWITCHER TEMA GELAP / TERANG
+        const themeToggle = document.getElementById('themeToggle');
+        const themeToggleText = document.getElementById('themeToggleText');
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggleText.textContent = 'Mode Terang';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeToggleText.textContent = 'Mode Gelap';
+            }
+        });
+
+        // 2. JAM DIGITAL LIVE
+        function updateDateTime() {
+            const now = new Date();
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('liveDateTime').textContent = `${days[now.getDay()]} , ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]} ${now.getFullYear()} • ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // 3. FOOTER TAHUN OTOMATIS
+        const currentYear = new Date().getFullYear();
+        document.getElementById('copyrightText').textContent = `${currentYear} Muhammad Avie Sienna`;
+
+        // 4. DETEKSI NAMA FILE PREVIEW
+        document.getElementById('buktiTransfer').addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : '';
+            const previewText = document.getElementById('filePreviewName');
+            if(fileName) {
+                previewText.textContent = "✔ File terpilih: " + fileName;
+                previewText.style.color = "#10b981"; 
+            } else {
+                previewText.textContent = "";
+            }
+        });
+
+        // 5. LOGIKA UPLOAD GAMBAR OTOMATIS KE CLOUD DAN KIRIM KE WHATSAPP
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const previewText = document.getElementById('filePreviewName');
+            const fileInput = document.getElementById('buktiTransfer');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Silakan pilih foto bukti transfer terlebih dahulu!");
+                return;
+            }
+
+            // Kunci tombol agar user tidak klik berkali-kali saat upload berjalan
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Mengunggah Gambar Bukti... Mohon Tunggu...";
+            previewText.textContent = "⏳ Sedang memproses dan mengunggah gambar ke server...";
+            previewText.style.color = "#f59e0b";
+
+            // Menggunakan API Imgur (Free Anonymous Image Hosting) untuk bypass kirim gambar langsung
+            const formData = new FormData();
+            formData.append("image", file);
+
+            fetch("https://api.imgur.com/3/image", {
+                method: "POST",
+                headers: {
+                    Authorization: "Client-ID c9c82bc0e67cf77" // Client-ID Public Demo gratisan
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    const imageUrl = result.data.link; // Tautan gambar langsung yang berhasil di-upload
+                    kirimKeWhatsApp(imageUrl);
+                } else {
+                    throw new Error("Gagal mengunggah ke penyimpanan cloud.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Sistem gagal mengunggah gambar otomatis. Namun data akan tetap kami kirim ke WhatsApp.");
+                kirimKeWhatsApp("Gagal upload otomatis (Silakan lampirkan manual di WA)");
+            })
+            .finally(() => {
+                // Kembalikan status tombol seperti semula
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Kirim Konfirmasi Pembayaran WA";
+                previewText.textContent = "✔ Selesai dialihkan ke WhatsApp!";
+                previewText.style.color = "#10b981";
+            });
+        });
+
+        function kirimKeWhatsApp(urlGambar) {
+            const nama = document.getElementById('nama').value;
+            const bank = document.getElementById('bankTujuan').value;
+            const nominal = document.getElementById('nominal').value;
+            const statusTransfer = document.getElementById('statusTransfer').value;
+            const keterangan = document.getElementById('keterangan').value || '-';
+
+            const formattedNominal = Number(nominal).toLocaleString('id-ID');
+            const whatsappNumber = "6285245867094"; 
+            
+            // Format Tanggal Update Otomatis saat klik kirim
+            const now = new Date();
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            const timestampString = `${days[now.getDay()]}, ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]} ${now.getFullYear()} Pukul ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
+
+            // Teks Chat Otomatis WA yang memuat Link Gambar
+            const textMessage = `Halo pak *Muhammad Avie Sienna*,%0A%0ASaya *${encodeURIComponent(nama)}* ingin melakukan konfirmasi pembayaran dengan rincian berikut:%0A%0A` +
+                                `• *Nama Pengirim:* *${encodeURIComponent(nama)}*%0A` +
+                                `• *Bank Tujuan:* Bank ${encodeURIComponent(bank)}%0A` +
+                                `• *Nominal Transfer:* Rp ${encodeURIComponent(formattedNominal)}%0A` +
+                                `• *Status Transfer:* *${encodeURIComponent(statusTransfer)}*%0A` +
+                                `• *Tanggal Update:* ${encodeURIComponent(timestampString)}%0A` +
+                                `• *Link Foto Bukti Transfer:* ${encodeURIComponent(urlGambar)}%0A` +
+                                `• *Keterangan:* ${encodeURIComponent(keterangan)}%0A%0A` +
+                                `Pak *Muhammad Avie Sienna* bisa langsung mengklik tautan link di atas untuk melihat gambar struk transfer saya secara langsung. Terima kasih banyak!`;
+
+            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${textMessage}`, '_blank');
+        }
+    </script>
+</body>
+</html>
